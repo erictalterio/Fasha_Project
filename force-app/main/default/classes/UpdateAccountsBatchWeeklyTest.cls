@@ -4,7 +4,7 @@ private class UpdateAccountsBatchWeeklyTest {
     @isTest static void testBatchProcessing() {
         // Prepare test data - Create 201 accounts and associated orders
         List<Account> testAccounts = TestDataFactory.createAccountsAndOrders(201, 1000.0); // Assuming each order has a total amount of 1000.0
-
+        
         Test.startTest();
         // Instantiate and execute the batch job
         UpdateAccountsBatchWeekly batchWeekly = new UpdateAccountsBatchWeekly();

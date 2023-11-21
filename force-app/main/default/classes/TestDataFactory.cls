@@ -45,7 +45,7 @@ public class TestDataFactory
         insert accounts;
 
         for (Account acc : accounts) {
-            Order ord = new Order(AccountId = acc.Id, Status = 'Ordered');
+            Order ord = new Order(AccountId = acc.Id, Status = 'Ordered', EffectiveDate=Date.today());
             orders.add(ord);
         }
         insert orders;
