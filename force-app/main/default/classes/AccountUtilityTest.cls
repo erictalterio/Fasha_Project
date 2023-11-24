@@ -30,7 +30,7 @@ private class AccountUtilityTest {
         // Insert all new OrderItems at once
         insert allTestOrderItems;
 
-        // Prepare Set of Account IDs for updating Chiffre_d'affaire__c
+        // Prepare Set of Account IDs for updating Chiffre_d_affaire__c
         Set<Id> accountIds = new Set<Id>();
         for (Account acc : testAccounts) {
             accountIds.add(acc.Id);
@@ -41,9 +41,9 @@ private class AccountUtilityTest {
         AccountUtility.updateChiffreDAffaire(accountIds);
         Test.stopTest();
 
-        // Assert that Chiffre_d'affaire__c field is updated correctly
-        for (Account acc : [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accountIds]) {
-            System.assertEquals(1000.0, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c should be updated correctly.');
+        // Assert that Chiffre_d_affaire__c field is updated correctly
+        for (Account acc : [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN:accountIds]){
+            System.assertEquals(1000.0, acc.Chiffre_d_affaire__c, 'CA Updated correctly');
         }
     }
 }

@@ -1,4 +1,4 @@
-@isTest
+@isTest(SeeAllData=true)
 private class OrderTriggerHandlerTest {
 
     // Ensure the standard Pricebook is active and return its ID
@@ -48,39 +48,35 @@ private class OrderTriggerHandlerTest {
 
     // Test method for calculating net amount on orders
     @isTest static void testCalculateNetAmount() {
-        Id standardPbId = ensureStandardPricebookIsActive();
-        Id standardPbeId = getStandardPricebookEntryId();
-
-        // Create test data
+        // Setup test data
         Account testAccount = new Account(Name = 'Test Account');
         insert testAccount;
+
         Order testOrder = new Order(
             AccountId = testAccount.Id,
             Status = 'Draft',
             EffectiveDate = Date.today(),
-            Pricebook2Id = standardPbId
+            Pricebook2Id = Test.getStandardPricebookId()
         );
         insert testOrder;
+
+        // Create OrderItem for the Order
         OrderItem testOrderItem = new OrderItem(
             OrderId = testOrder.Id,
-            PricebookEntryId = standardPbeId,
+            PricebookEntryId = TestDataFactory.getStandardPricebookEntryId(),
             Quantity = 1,
             UnitPrice = 1000
         );
         insert testOrderItem;
 
-        // Update order to Ordered status
+        // Update Order to trigger the calculation
         testOrder.Status = 'Ordered';
+        testOrder.ShipmentCost__c = 100; // Assuming ShipmentCost__c is a custom field on Order
         update testOrder;
 
-        // Create TriggerContext and invoke handler
-        List<Order> orders = new List<Order>{ testOrder };
-        TriggerContext context = new TriggerContext(orders, true, false, true);
-        OrderTriggerHandler.handleTrigger(context);
-
-        // Assertions
-        Order updatedOrder = [SELECT NetAmount__c FROM Order WHERE Id = :testOrder.Id];
-        System.assertEquals(1000, updatedOrder.NetAmount__c, 'Net amount should be correctly calculated.');
+        // Verify the NetAmount__c calculation
+        testOrder = [SELECT NetAmount__c FROM Order WHERE Id = :testOrder.Id];
+        System.assertEquals(900, testOrder.NetAmount__c, 'Net amount should be correctly calculated.');
     }
 
     // Test method for updating Account's Chiffre_d_affaire__c

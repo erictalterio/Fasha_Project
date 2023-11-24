@@ -66,7 +66,7 @@ public class TestDataFactory
     }
     
 
-    private static Id getStandardPricebookId() {
+    public static Id getStandardPricebookId() {
         // Query for the standard Pricebook
         List<Pricebook2> standardPbs = [SELECT Id FROM Pricebook2 WHERE IsStandard = true AND IsActive = true LIMIT 1];
         
@@ -87,7 +87,7 @@ public class TestDataFactory
      * @param orders      The list of Order records to associate with OrderItems.
      * @param orderAmount The simulated total amount for each Order.
      */
-    private static void createAndInsertOrderItems(List<Order> orders, Decimal orderAmount) {
+    public static void createAndInsertOrderItems(List<Order> orders, Decimal orderAmount) {
         List<OrderItem> orderItems = new List<OrderItem>();
 
         // Assuming there's a standard PricebookEntry available in the org
@@ -114,7 +114,7 @@ public class TestDataFactory
      *
      * @return The ID of a standard PricebookEntry.
      */
-    private static Id getStandardPricebookEntryId() {
+    public static Id getStandardPricebookEntryId() {
         // Query for an active standard PricebookEntry
         List<PricebookEntry> standardPBEs = [
             SELECT Id FROM PricebookEntry
