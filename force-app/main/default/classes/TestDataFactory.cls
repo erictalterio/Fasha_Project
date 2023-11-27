@@ -1,5 +1,5 @@
-    // Utility class for creating test data like Accounts, Orders, Products, etc.
-    // Crucial for providing consistent test data across various test classes.
+// Utility class for creating test data like Accounts, Orders, Products, etc.
+// Crucial for providing consistent test data across various test classes.
 @isTest
 public class TestDataFactory
 
@@ -26,7 +26,7 @@ public class TestDataFactory
         return(accounts);
     }
 
-   /**
+    /**
      * Creates a list of Accounts and associated Orders in bulk.
      * Note: TotalAmount for each Order is calculated based on associated OrderItems.
      *
@@ -34,51 +34,49 @@ public class TestDataFactory
      * @param orderAmount The total amount for each Order (simulated by creating OrderItems).
      * @return            A list of created Account records.
      */
-    public static List<Account> createAccountsAndOrders(Integer numAccounts, Decimal orderAmount) {
-        // Directly use the standard Pricebook ID
-        Id standardPbId = '01s07000000Ewp4AAC'; // standard Pricebook ID
-        //Id standardPbId = getStandardPricebookId();
-    
+    public static List<Account> createAccountsAndOrders(Integer numAccounts, Decimal orderAmount)
+    {
+        Id standardPbId = getStandardPriceBookId();
+
         List<Account> accounts = new List<Account>();
-        List<Order> orders = new List<Order>();
-    
+        List<Order>   orders   = new List<Order>();
+
         for (Integer i = 0; i < numAccounts; i++) {
             Account acc = new Account(Name = 'Bulk Test Account ' + i);
             accounts.add(acc);
         }
         insert accounts;
-    
+
         for (Account acc : accounts) {
             Order ord = new Order(
-                AccountId = acc.Id,
-                Status = 'Ordered',
+                AccountId     = acc.Id,
+                Status        = 'Ordered',
                 EffectiveDate = Date.today(),
-                Pricebook2Id = standardPbId  // Set standard Pricebook ID here
-            );
+                Pricebook2Id  = standardPbId // Set the standard Pricebook ID here
+                );
             orders.add(ord);
         }
         insert orders;
-    
-        // Create and insert OrderItems for each order to simulate TotalAmount
-        createAndInsertOrderItems(orders, orderAmount);
-    
-        return accounts;
-    }
-    
 
-    public static Id getStandardPricebookId() {
+        createAndInsertOrderItems(orders, orderAmount);
+
+        return(accounts);
+    }
+
+    public static Id getStandardPricebookId()
+    {
         // Query for the standard Pricebook
         List<Pricebook2> standardPbs = [SELECT Id FROM Pricebook2 WHERE IsStandard = true AND IsActive = true LIMIT 1];
-        
-        if (!standardPbs.isEmpty()) {
-            return standardPbs[0].Id;
+
+        if (!standardPbs.isEmpty())
+        {
+            return(standardPbs[0].Id);
         }
-    
+
         // Handle the case where no active standard Pricebook is found
         System.debug('No active standard Pricebook found.');
-        return null;
+        return(null);
     }
-    
 
     /**
      * Creates and inserts OrderItems for given orders.
@@ -87,7 +85,8 @@ public class TestDataFactory
      * @param orders      The list of Order records to associate with OrderItems.
      * @param orderAmount The simulated total amount for each Order.
      */
-    public static void createAndInsertOrderItems(List<Order> orders, Decimal orderAmount) {
+    public static void createAndInsertOrderItems(List<Order> orders, Decimal orderAmount)
+    {
         List<OrderItem> orderItems = new List<OrderItem>();
 
         // Assuming there's a standard PricebookEntry available in the org
@@ -95,15 +94,16 @@ public class TestDataFactory
 
         for (Order ord : orders) {
             OrderItem oi = new OrderItem(
-                OrderId = ord.Id,
+                OrderId          = ord.Id,
                 PricebookEntryId = standardPricebookEntryId,
-                Quantity = 1,
-                UnitPrice = orderAmount
-            );
+                Quantity         = 1,
+                UnitPrice        = orderAmount
+                );
             orderItems.add(oi);
         }
 
-        if (!orderItems.isEmpty()) {
+        if (!orderItems.isEmpty())
+        {
             insert orderItems;
         }
     }
@@ -114,34 +114,35 @@ public class TestDataFactory
      *
      * @return The ID of a standard PricebookEntry.
      */
-    public static Id getStandardPricebookEntryId() {
+    public static Id getStandardPricebookEntryId()
+    {
         // Query for an active standard PricebookEntry
         List<PricebookEntry> standardPBEs = [
             SELECT Id FROM PricebookEntry
             WHERE Pricebook2.IsStandard = true
-            AND IsActive = true
-            LIMIT 1
+                                          AND IsActive = true
+                                                         LIMIT 1
         ];
-    
-        if (!standardPBEs.isEmpty()) {
-            return standardPBEs[0].Id;
+
+        if (!standardPBEs.isEmpty())
+        {
+            return(standardPBEs[0].Id);
         }
-    
+
         // No active standard PricebookEntry found, create one
         Product2 testProduct = new Product2(Name = 'Test Product', IsActive = true);
-        insert testProduct;
-    
+        insert   testProduct;
+
         PricebookEntry standardPBE = new PricebookEntry(
             Pricebook2Id = Test.getStandardPricebookId(),
-            Product2Id = testProduct.Id,
-            UnitPrice = 100.0,
-            IsActive = true
-        );
+            Product2Id   = testProduct.Id,
+            UnitPrice    = 100.0,
+            IsActive     = true
+            );
         insert standardPBE;
-    
-        return standardPBE.Id;
+
+        return(standardPBE.Id);
     }
-    
 
     /**
      * Creates a list of Product records.
@@ -186,7 +187,7 @@ public class TestDataFactory
             // Creating a new PricebookEntry for each product
             pbEntries.add(new PricebookEntry(
                               Pricebook2Id = Test.getStandardPricebookId(),
-                              Product2Id    = product.Id,
+                              Product2Id   = product.Id,
                               UnitPrice    = 1000,
                               IsActive     = true
                               ));
@@ -251,28 +252,30 @@ public class TestDataFactory
     // Method to create OrderItems
     // This method creates OrderItem records linked to Orders and PricebookEntries.
     // The records can be inserted into the database based on the doInsert flag.
-    public static List<OrderItem> createOrderItems(List<Order> orders, Decimal orderAmount) {
+    public static List<OrderItem> createOrderItems(List<Order> orders, Decimal orderAmount)
+    {
         List<OrderItem> orderItems = new List<OrderItem>();
-        
+
         // Assuming there's a standard PricebookEntry available in the org
         Id standardPricebookEntryId = getStandardPricebookEntryId();
-    
+
         for (Order ord : orders) {
             OrderItem oi = new OrderItem(
-                OrderId = ord.Id,
+                OrderId          = ord.Id,
                 PricebookEntryId = standardPricebookEntryId,
-                Quantity = 1,
-                UnitPrice = orderAmount
-            );
+                Quantity         = 1,
+                UnitPrice        = orderAmount
+                );
             orderItems.add(oi);
         }
-    
-        if (!orderItems.isEmpty()) {
+
+        if (!orderItems.isEmpty())
+        {
             insert orderItems;
         }
-    
-        return orderItems;
-    }    
+
+        return(orderItems);
+    }
 
 /**
  * Creates a specified number of Order records for each provided Account.
@@ -283,28 +286,29 @@ public class TestDataFactory
  * @param doInsert    If true, inserts the records into the database.
  * @param orderAmount The simulated total amount for each Order.
  */
-public static void createOrders(List<Account> accounts, Integer numOrders, Boolean doInsert, Decimal orderAmount) {
-    List<Order> orders = new List<Order>();
+    public static void createOrders(List<Account> accounts, Integer numOrders, Boolean doInsert, Decimal orderAmount)
+    {
+        List<Order> orders = new List<Order>();
 
-    // Ensure we are using the correct standard Pricebook ID
-    Id standardPricebookId = Test.getStandardPricebookId(); // This method should return the correct standard Pricebook ID
+        // Ensure we are using the correct standard Pricebook ID
+        Id standardPricebookId = Test.getStandardPricebookId(); // This method should return the correct standard Pricebook ID
 
-    for (Account acc : accounts) {
-        for (Integer i = 0; i < numOrders; i++) {
-            Order ord = new Order(
-                AccountId = acc.Id,
-                Status = 'Draft', // Use 'Draft' or another valid status
-                EffectiveDate = Date.today(),
-                Pricebook2Id = standardPricebookId // Set the standard Pricebook ID here
-            );
-            orders.add(ord);
+        for (Account acc : accounts) {
+            for (Integer i = 0; i < numOrders; i++) {
+                Order ord = new Order(
+                    AccountId     = acc.Id,
+                    Status        = 'Draft', // Use 'Draft' or another valid status
+                    EffectiveDate = Date.today(),
+                    Pricebook2Id  = standardPricebookId // Set the standard Pricebook ID here
+                    );
+                orders.add(ord);
+            }
+        }
+
+        if (doInsert && !orders.isEmpty())
+        {
+            insert orders;
+            createAndInsertOrderItems(orders, orderAmount); // Create OrderItems to simulate TotalAmount
         }
     }
-
-    if (doInsert && !orders.isEmpty()) {
-        insert orders;
-        createAndInsertOrderItems(orders, orderAmount); // Create OrderItems to simulate TotalAmount
-    }
-}
-
 }

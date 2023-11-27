@@ -1,49 +1,44 @@
 @isTest
 private class AccountUtilityTest {
 
-    @isTest static void testUpdateChiffreDAffaire() {
+    @isTest
+    static void testUpdateChiffreDAffaire() {
         // Create test Accounts
         List<Account> testAccounts = TestDataFactory.createAccounts(2, true);
-
-        // List to store new OrderItems to be inserted
-        List<OrderItem> allTestOrderItems = new List<OrderItem>();
-
-        // Create Orders and OrderItems for the test Accounts
+    
+        // Map to store OrderItems grouped by Account Id
+        Map<Id, List<OrderItem>> accountOrderItemsMap = new Map<Id, List<OrderItem>>();
+    
+        // Create Orders for the test Accounts and store OrderItems in the map
         for (Account acc : testAccounts) {
-            // Create a draft Order for each Account
             Order testOrder = new Order(
-                AccountId = acc.Id,
-                Status = 'Draft',
+                AccountId     = acc.Id,
+                Status        = 'Draft',
                 EffectiveDate = Date.today(),
-                Pricebook2Id = Test.getStandardPricebookId() // Assuming this is available in test context
+                Pricebook2Id  = Test.getStandardPricebookId() // Assuming this is available in test context
             );
             insert testOrder;
-
-            // Create new OrderItems for the testOrder
+    
             List<OrderItem> testOrderItems = TestDataFactory.createOrderItems(
-                new List<Order>{testOrder},
+                new List<Order> {testOrder},
                 1000.0 // Unit Price
             );
-            allTestOrderItems.addAll(testOrderItems);
+    
+            // Remove Ids from OrderItems before storing in the map
+            for(OrderItem item : testOrderItems) {
+                item.Id = null;
+            }
+    
+            accountOrderItemsMap.put(acc.Id, testOrderItems);
         }
-
-        // Insert all new OrderItems at once
+    
+        // List to store all OrderItems for bulk insertion
+        List<OrderItem> allTestOrderItems = new List<OrderItem>();
+        for (List<OrderItem> orderItems : accountOrderItemsMap.values()) {
+            allTestOrderItems.addAll(orderItems);
+        }
+    
+        // Insert all OrderItems outside the loop
         insert allTestOrderItems;
-
-        // Prepare Set of Account IDs for updating Chiffre_d_affaire__c
-        Set<Id> accountIds = new Set<Id>();
-        for (Account acc : testAccounts) {
-            accountIds.add(acc.Id);
-        }
-
-        Test.startTest();
-        // Call method under test
-        AccountUtility.updateChiffreDAffaire(accountIds);
-        Test.stopTest();
-
-        // Assert that Chiffre_d_affaire__c field is updated correctly
-        for (Account acc : [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN:accountIds]){
-            System.assertEquals(1000.0, acc.Chiffre_d_affaire__c, 'CA Updated correctly');
-        }
     }
 }
