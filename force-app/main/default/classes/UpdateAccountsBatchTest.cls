@@ -1,31 +1,22 @@
-    // Test class for UpdateAccountsBatch.
-    // Verifies the batch processing logic, ensuring it functions correctly in a bulk data context.
-    @isTest
-    private class UpdateAccountsBatchTest {
-        @isTest static void testBatchUpdate() {
-            // Create test Accounts using TestDataFactory
-            List<Account> testAccounts = TestDataFactory.createAccounts(2, true);
-    
-            // Fetch the standard Pricebook ID
-            Id standardPbId = test.getStandardPricebookId();
-    
-            // Create Orders for the test Accounts
-            List<Order> testOrders = new List<Order>();
-            for (Account acc : testAccounts) {
-                testOrders.add(new Order(
-                    AccountId     = acc.Id,
-                    Status        = 'Draft', // or any valid status
-                    EffectiveDate = Date.today(),
-                    Pricebook2Id  = standardPbId // Set the standard Pricebook ID here
-                ));
-            }
-            insert testOrders;
-    
-            // Run your batch job here
-            Test.startTest();
-            UpdateAccountsBatch batchJob = new UpdateAccountsBatch();
-            Database.executeBatch(batchJob);
-            Test.stopTest();
+@isTest
+private class UpdateAccountsBatchTest {
+    @isTest static void testBatchUpdate() {
+        // Create test Accounts and Orders using TestDataFactory
+        List<Account> testAccounts = TestDataFactory.createAccountsAndOrders(2, 1000.00);
 
+        // Ensure Orders are set to 'Ordered' status
+        List<Order> ordersToUpdate = [SELECT Id FROM Order WHERE AccountId IN :testAccounts];
+        for (Order ord : ordersToUpdate) {
+            ord.Status = 'Ordered';
         }
+        update ordersToUpdate;
+
+        // Run the batch job
+        Test.startTest();
+        UpdateAccountsBatch batchJob = new UpdateAccountsBatch();
+        Database.executeBatch(batchJob);
+        Test.stopTest();
+
+        // Add assertions as necessary to verify the logic
     }
+}
