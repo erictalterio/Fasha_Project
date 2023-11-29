@@ -7,7 +7,7 @@
             List<Account> testAccounts = TestDataFactory.createAccounts(2, true);
     
             // Fetch the standard Pricebook ID
-            Id standardPbId = TestDataFactory.getStandardPricebookId();
+            Id standardPbId = test.getStandardPricebookId();
     
             // Create Orders for the test Accounts
             List<Order> testOrders = new List<Order>();

@@ -36,7 +36,7 @@ public class TestDataFactory
      */
     public static List<Account> createAccountsAndOrders(Integer numAccounts, Decimal orderAmount)
     {
-        Id standardPbId = getStandardPriceBookId();
+        Id standardPbId = Test.getStandardPriceBookId();
 
         List<Account> accounts = new List<Account>();
         List<Order>   orders   = new List<Order>();
@@ -63,20 +63,6 @@ public class TestDataFactory
         return(accounts);
     }
 
-    public static Id getStandardPricebookId()
-    {
-        // Query for the standard Pricebook
-        List<Pricebook2> standardPbs = [SELECT Id FROM Pricebook2 WHERE IsStandard = true AND IsActive = true LIMIT 1];
-
-        if (!standardPbs.isEmpty())
-        {
-            return(standardPbs[0].Id);
-        }
-
-        // Handle the case where no active standard Pricebook is found
-        System.debug('No active standard Pricebook found.');
-        return(null);
-    }
 
     /**
      * Creates and inserts OrderItems for given orders.
