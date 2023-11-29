@@ -1,9 +1,13 @@
-<apex:page controller="MyTeamOrdersController" >
-    <!-- This Visualforce page displays the sum of all orders.
-         It utilizes the MyTeamOrdersController to fetch and display this sum. -->
-    <div>
-        <h1>
-            Sum of my team orders: <apex:outputText value="{!SumOrders}" />
-        </h1>
-    </div>
+<apex:page controller="MyTeamOrdersController">
+    <h1>Sum of my team orders: <apex:outputText value="{!sumOrders}" /></h1>
+    
+    <h2>Orders by Owner</h2>
+    <apex:dataTable value="{!ownerTotals}" var="ownerTotal" border="1" cellpadding="5">
+        <apex:column headerValue="Sales Agent">
+            <apex:outputText value="{!ownerTotal.ownerName}" />
+        </apex:column>
+        <apex:column headerValue="Total Orders Amount">
+            <apex:outputText value="{!ownerTotal.totalAmount}" />
+        </apex:column>
+    </apex:dataTable>
 </apex:page>

@@ -26,7 +26,6 @@
             UpdateAccountsBatch batchJob = new UpdateAccountsBatch();
             Database.executeBatch(batchJob);
             Test.stopTest();
-    
-            // Add assertions or queries to verify the changes made by the batch job
+
         }
     }
