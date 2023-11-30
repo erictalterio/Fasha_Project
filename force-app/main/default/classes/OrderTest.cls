@@ -1,24 +1,36 @@
 @isTest
-// Verifies the creation of Order. Ensures data integrity and correct
-// functioning of data creation methods in TestDataFactory. 
+// This test class is designed to verify the creation and correct association of Order records
+// with Account records in Salesforce. It ensures that the data creation methods in the
+// TestDataFactory are functioning as expected, maintaining data integrity.
 private class OrderTest {
     @isTest static void testOrderCreation() {
-        // Creating accounts and associated orders
+        // Arrange: Create a significant number of Accounts and their associated Orders.
+        // This step uses TestDataFactory to generate realistic test data. Creating 201 accounts
+        // tests the data creation methods in bulk scenarios, ensuring they work correctly
+        // under load and can handle realistic volumes of data.
         List<Account> accounts = TestDataFactory.createAccountsAndOrders(201, 1000.0);
 
-        // Query to verify the orders are created and associated correctly
+        // Act: Query to verify that the Orders are created and correctly associated with Accounts.
+        // This query retrieves Orders linked to the test Accounts, checking both the creation
+        // of Orders and their correct association with Account records.
         List<Order> orders = [SELECT Id, AccountId FROM Order WHERE AccountId IN :accounts];
 
-        // Assertions to verify the correct number of orders are created and associated
+        // Assert: Verify the correct number and association of Orders.
+        // The assertion checks the number of Orders created against the expected count,
+        // confirming the correct operation of the data creation methods.
         System.assertEquals(201, orders.size(), 'There should be 201 orders created.');
 
-        // Create a set of Account IDs for easier comparison
+        // Create a Set of Account IDs for efficient comparison.
+        // This Set facilitates checking that each Order is associated with one of the test Accounts,
+        // providing a quick and efficient way to verify correct associations.
         Set<Id> accountIds = new Set<Id>();
         for (Account acc : accounts) {
             accountIds.add(acc.Id);
         }
 
-        // Check each Order's AccountId is in the set of test Account IDs
+        // Check each Order's AccountId against the Set of test Account IDs.
+        // These assertions ensure that every Order is linked to a valid Account and that
+        // the Orders are correctly associated with the Accounts created in the test setup.
         for (Order ord : orders) {
             System.assertNotEquals(null, ord.Id, 'Order Id should not be null after insertion.');
             System.assert(accountIds.contains(ord.AccountId), 'Order should be associated with one of the test accounts.');
