@@ -1,7 +1,6 @@
 @isTest
 // This test class is designed to verify the correct creation of PricebookEntry records in Salesforce.
-// It ensures that the data creation methods in the TestDataFactory function as expected,
-// maintaining data integrity and consistency in the context of pricebook entries.
+// It ensures that the data creation methods in the TestDataFactory function as expected
 private class PriceBookEntryTest {
     @isTest static void testPricebookEntryCreation() {
         // Arrange: Create a set of Products needed for PricebookEntries.

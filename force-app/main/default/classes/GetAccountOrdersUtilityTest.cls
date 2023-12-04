@@ -10,12 +10,9 @@ private class GetAccountOrdersUtilityTest {
 
     @isTest static void testGetAccountQueryLocator() {
         // Prepare the test environment by ensuring the availability of a standard Pricebook.
-        // This is a common setup requirement in Salesforce for creating Products and Orders.
         Id standardPbId = Test.getStandardPricebookId();
 
         // Create a test product to be used in test Orders.
-        // Setting up relevant test data ensures the query in the utility class has
-        // related records to work with, allowing for a meaningful test of its functionality.
         Product2 testProduct = new Product2(Name = 'Test Product', IsActive = true);
         insert testProduct;
 

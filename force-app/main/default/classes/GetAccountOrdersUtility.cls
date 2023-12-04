@@ -12,7 +12,7 @@ public with sharing class GetAccountOrdersUtility {
     // A constant String that holds the SOQL query. This query retrieves Accounts that have
     // related Orders with the status 'Ordered'. It ensures that only Accounts with relevant
     // Orders are considered, optimizing the data retrieval process by filtering out irrelevant records.
-    // The use of a subquery (inner query) in the WHERE clause efficiently filters Accounts based on
+    // The use of a subquery in the WHERE clause efficiently filters Accounts based on
     // related Order data, reducing the need for additional filtering or processing in Apex.
     // 'WITH SECURITY_ENFORCED' clause is included to enforce field- and object-level security,
     // ensuring that the query respects the user’s permissions and visibility.
@@ -27,7 +27,7 @@ public with sharing class GetAccountOrdersUtility {
 
     /**
      * This method provides a QueryLocator for the ACCOUNT_QUERY.
-     * A QueryLocator is used in scenarios like batch Apex, where it allows efficient and stateful
+     * A QueryLocator is used in scenarios like batch Apex, where it allows efficient
      * processing of large data sets. By returning a QueryLocator, this method enables the calling
      * process to handle large volumes of data that might otherwise exceed governor limits if
      * processed in a single transaction.

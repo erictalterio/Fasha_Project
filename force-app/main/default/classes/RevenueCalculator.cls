@@ -1,8 +1,7 @@
 /**
  * The RevenueCalculator class is responsible for calculating the total revenue
  * for a list of Accounts. It updates each Account's revenue based on the total
- * amount of their associated Orders. This class is essential for maintaining up-to-date
- * revenue information on Account records, a key metric in many business processes.
+ * amount of their associated Orders.
  */
 public class RevenueCalculator {
 

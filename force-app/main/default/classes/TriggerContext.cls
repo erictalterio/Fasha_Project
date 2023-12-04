@@ -17,7 +17,7 @@ public class TriggerContext {
     public Boolean isAfter;
 
     // Flag indicating if the operation of the trigger is an 'update'.
-    // This helps in distinguishing the type of DML operation (like insert, update, delete) that invoked the trigger.
+    // This helps in distinguishing the type of operation (insert, update, delete) that invoked the trigger.
     public Boolean isUpdate;
 
     /**

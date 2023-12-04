@@ -15,7 +15,7 @@ public class OrderTriggerHandler {
 
         // Process after-update trigger events.
         // This block is executed after an Order record has been updated.
-        // It's typically used for post-processing, such as updating related records based on the updated Order.
+        // It's used in situations such as updating related records based on the updated Order.
         if (context.isAfter && context.isUpdate) {
             updateAccountChiffreDAffaire(context.orders);
         }

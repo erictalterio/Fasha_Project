@@ -3,8 +3,6 @@ private class OrderTriggerHandlerTest {
 
     /**
      * Retrieves the ID of the standard Pricebook from Salesforce.
-     * This utility method is essential for tests that require operations on Pricebooks,
-     * as the standard Pricebook ID is often needed to create related records like Orders and PricebookEntries.
      */
     private static Id getStandardPricebookId() {
         return Test.getStandardPricebookId();
@@ -62,7 +60,7 @@ private class OrderTriggerHandlerTest {
 
         // Update the Order to trigger the net amount calculation logic in the trigger.
         testOrder.Status = 'Ordered';
-        testOrder.ShipmentCost__c = 100; // Assuming ShipmentCost__c is a custom field.
+        testOrder.ShipmentCost__c = 100;
         update testOrder;
 
         // Verify that the net amount is correctly calculated by the trigger logic.

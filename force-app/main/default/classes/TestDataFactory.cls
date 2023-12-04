@@ -1,5 +1,4 @@
 // Utility class for creating test data like Accounts, Orders, Products, etc.
-// Crucial for providing consistent test data across various test classes.
 @isTest
 public class TestDataFactory
 
@@ -28,7 +27,7 @@ public class TestDataFactory
 
     /**
      * Creates a list of Accounts and associated Orders in bulk.
-     * Note: TotalAmount for each Order is calculated based on associated OrderItems.
+     * TotalAmount for each Order is calculated based on associated OrderItems.
      *
      * @param numAccounts The number of Account and Order pairs to create.
      * @param orderAmount The total amount for each Order (simulated by creating OrderItems).
@@ -283,7 +282,7 @@ public class TestDataFactory
             for (Integer i = 0; i < numOrders; i++) {
                 Order ord = new Order(
                     AccountId     = acc.Id,
-                    Status        = 'Draft', // Use 'Draft' or another valid status
+                    Status        = 'Draft',
                     EffectiveDate = Date.today(),
                     Pricebook2Id  = standardPricebookId // Set the standard Pricebook ID here
                     );

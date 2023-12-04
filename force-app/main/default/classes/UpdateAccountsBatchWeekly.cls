@@ -1,5 +1,5 @@
 // A combination of batch and schedulable class.
-// Automates weekly updates of Account revenue, improving operational efficiency.
+// Automates weekly updates of Account revenue.
 public class UpdateAccountsBatchWeekly implements Database.Batchable<sObject>, Schedulable {
 
     /**
@@ -34,7 +34,7 @@ public class UpdateAccountsBatchWeekly implements Database.Batchable<sObject>, S
      * It calculates and updates the revenue for each Account in the batch.
      *
      * @param bc The context of the batch job.
-     * @param scope The list of sObject records (Accounts) in the current batch to be processed.
+     * @param scope The list of records (Accounts) in the current batch to be processed.
      */
     public void execute(Database.BatchableContext bc, List<sObject> scope) {
         List<Account> accounts = new List<Account>();

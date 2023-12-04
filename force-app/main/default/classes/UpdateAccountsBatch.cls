@@ -16,7 +16,6 @@ global class UpdateAccountsBatch implements Database.Batchable<sObject> {
      */
     global Database.QueryLocator start(Database.BatchableContext bc) {
         // Retrieve the query locator from GetAccountOrdersUtility, defining which accounts to process.
-        // This approach centralizes the query logic, making it reusable and maintainable.
         return GetAccountOrdersUtility.getAccountQueryLocator();
     }
 
@@ -45,7 +44,6 @@ global class UpdateAccountsBatch implements Database.Batchable<sObject> {
      */
     global void finish(Database.BatchableContext bc) {
         // Log a message indicating the completion of the batch process.
-        // This is useful for monitoring and debugging purposes.
         System.debug('UpdateAccountsBatch: Batch job has finished.');
     }
 }

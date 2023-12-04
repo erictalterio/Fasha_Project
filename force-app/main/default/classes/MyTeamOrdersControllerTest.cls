@@ -3,7 +3,7 @@ private class MyTeamOrdersControllerTest {
     /**
      * This test class is designed to validate the functionality of the MyTeamOrdersController class.
      * It focuses particularly on testing the accurate calculation of aggregate order sums,
-     * especially when dealing with bulk data, which is a common real-world scenario in Salesforce applications.
+     * especially when dealing with bulk data.
      */
 
     @isTest static void testSumOrdersWithBulkData() {

@@ -5,8 +5,7 @@ public class MyTeamOrdersController {
      */
 
     // Holds the aggregate sum of all orders' total amounts.
-    // This public property allows external access to the total sum of orders, 
-    // which is a common requirement for reporting and data display purposes in UI components.
+    // Allows external access to the total sum of orders.
     public Decimal sumOrders { get; private set; }
 
     // A list to hold aggregated data by owner.

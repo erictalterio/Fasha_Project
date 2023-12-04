@@ -27,7 +27,7 @@ private class AccountUtilityTest {
                 AccountId     = acc.Id,
                 Status        = 'Draft',
                 EffectiveDate = Date.today(),
-                Pricebook2Id  = Test.getStandardPricebookId() // Assuming this is available in the test context
+                Pricebook2Id  = Test.getStandardPricebookId()
             );
             insert testOrder;
     
@@ -47,14 +47,13 @@ private class AccountUtilityTest {
         }
     
         // Consolidate all OrderItems into a single list for bulk insertion.
-        // This approach minimizes the number of DML operations, adhering to Salesforce governor limits
-        // and best practices for test efficiency and scalability.
+        // This approach minimizes the number of operations
         List<OrderItem> allTestOrderItems = new List<OrderItem>();
         for (List<OrderItem> orderItems : accountOrderItemsMap.values()) {
             allTestOrderItems.addAll(orderItems);
         }
     
-        // Insert all OrderItems with a single DML operation.
+        // Insert all OrderItems with a single operation.
         // This is an efficient way to handle data setup in tests, reducing resource usage
         // and execution time, which is crucial for maintaining optimal performance of test suites.
         insert allTestOrderItems;
