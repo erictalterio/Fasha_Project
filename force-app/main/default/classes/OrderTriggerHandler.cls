@@ -27,7 +27,7 @@ public class OrderTriggerHandler {
     // before the Order is saved to the database, maintaining data integrity and consistency.
     private static void calculateNetAmount(List<Order> orders) {
         for (Order ord : orders) {
-            if (ord.TotalAmount != null && ord.ShipmentCost__c != null) {
+            if (ord.TotalAmount != null && ord.ShipmentCost__c != null && ord.Status == 'Ordered') {
                 ord.NetAmount__c = ord.TotalAmount - ord.ShipmentCost__c;
             }
         }
@@ -40,7 +40,7 @@ public class OrderTriggerHandler {
     private static void updateAccountChiffreDAffaire(List<Order> orders) {
         Set<Id> accountIds = new Set<Id>();
         for (Order ord : orders) {
-            if (ord.AccountId != null) {
+            if (ord.AccountId != null && ord.Status == 'Ordered') {
                 accountIds.add(ord.AccountId);
             }
         }
